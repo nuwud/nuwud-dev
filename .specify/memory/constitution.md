@@ -1,50 +1,58 @@
-# [PROJECT_NAME] Constitution
-<!-- Example: Spec Constitution, TaskFlow Constitution, etc. -->
+# nuwud-dev Constitution
 
 ## Core Principles
 
-### [PRINCIPLE_1_NAME]
-<!-- Example: I. Library-First -->
-[PRINCIPLE_1_DESCRIPTION]
-<!-- Example: Every feature starts as a standalone library; Libraries must be self-contained, independently testable, documented; Clear purpose required - no organizational-only libraries -->
+### I. Automation-First
+Every repeatable POD or Shopify task must be scriptable. If a workflow requires more than 3 manual steps, write a script for it. Scripts live in `scripts/` and are documented in `TOOLS.md`. Tapstitch (no API) is the only sanctioned exception.
 
-### [PRINCIPLE_2_NAME]
-<!-- Example: II. CLI Interface -->
-[PRINCIPLE_2_DESCRIPTION]
-<!-- Example: Every library exposes functionality via CLI; Text in/out protocol: stdin/args → stdout, errors → stderr; Support JSON + human-readable formats -->
+### II. Secrets Stay Local
+No API tokens, JWTs, or credentials ever enter version control. All secrets load from `.env` (gitignored) using `python-dotenv` (Python) or `dotenv` (Node). `.env.example` is always kept in sync with required keys. OpenClaw workspace copies at `C:\Users\Nuwud\.openclaw\workspaces\nuwud-dev\` are the source of truth for credentials.
 
-### [PRINCIPLE_3_NAME]
-<!-- Example: III. Test-First (NON-NEGOTIABLE) -->
-[PRINCIPLE_3_DESCRIPTION]
-<!-- Example: TDD mandatory: Tests written → User approved → Tests fail → Then implement; Red-Green-Refactor cycle strictly enforced -->
+### III. Local AI by Default
+Ollama (`qwen3:30b-a3b`) is the primary inference engine. Cloud LLM APIs (Anthropic, OpenAI) are fallbacks only — never the first call. All agent tasks route through OpenClaw (`openclaw agent --agent nuwud-dev`). Remote APIs cost money; local models do not.
 
-### [PRINCIPLE_4_NAME]
-<!-- Example: IV. Integration Testing -->
-[PRINCIPLE_4_DESCRIPTION]
-<!-- Example: Focus areas requiring integration tests: New library contract tests, Contract changes, Inter-service communication, Shared schemas -->
+### IV. Script Portability (Windows-First)
+All shell commands must work in PowerShell on Windows. Avoid Linux-only tools (`fuser`, `lsof`, etc.) in scripts or documentation. Use `taskkill /PID <pid> /F` for port management. Use `python` (not `python3`) unless the environment requires it.
 
-### [PRINCIPLE_5_NAME]
-<!-- Example: V. Observability, VI. Versioning & Breaking Changes, VII. Simplicity -->
-[PRINCIPLE_5_DESCRIPTION]
-<!-- Example: Text I/O ensures debuggability; Structured logging required; Or: MAJOR.MINOR.BUILD format; Or: Start simple, YAGNI principles -->
+### V. Shopify Hydrogen Standards
+TypeScript only for Hydrogen/Storefront work. Use React Router v7 patterns. Regenerate types with `npm run codegen` after any GraphQL change. Never deploy to Oxygen without a clean `npm run typecheck` and `npm run build`.
 
-## [SECTION_2_NAME]
-<!-- Example: Additional Constraints, Security Requirements, Performance Standards, etc. -->
+### VI. Simplicity (YAGNI)
+Don't build what isn't needed yet. Scripts solve one product type at a time. No shared infrastructure for one-time operations. Abstractions require at least 3 use cases before being extracted.
 
-[SECTION_2_CONTENT]
-<!-- Example: Technology stack requirements, compliance standards, deployment policies, etc. -->
+## Technology Stack
 
-## [SECTION_3_NAME]
-<!-- Example: Development Workflow, Review Process, Quality Gates, etc. -->
+| Layer | Technology |
+|---|---|
+| Storefront | Shopify Hydrogen, React Router v7, TypeScript, Tailwind CSS v4 |
+| POD APIs | Printify REST, Printful REST |
+| AI / Inference | Ollama (local), OpenClaw gateway (port 3100) |
+| Primary model | `qwen3:30b-a3b` via Ollama |
+| Automation scripts | Python (with `python-dotenv`, `requests`) |
+| Package manager | npm (Hydrogen), pip (Python scripts) |
+| Hosting | Shopify Oxygen (edge) |
 
-[SECTION_3_CONTENT]
-<!-- Example: Code review requirements, testing gates, deployment approval process, etc. -->
+## Development Workflow
+
+1. **Spec** — run `/speckit.specify` to define what to build
+2. **Plan** — run `/speckit.plan` to generate design artifacts
+3. **Tasks** — run `/speckit.tasks` to create dependency-ordered task list
+4. **Implement** — run `/speckit.implement` or delegate to nuwud-dev agent
+5. **Verify** — `npm run typecheck` + `npm run build` for Hydrogen; test scripts against Printify/Printful sandbox where available
+6. **Commit** — conventional commits (`feat:`, `fix:`, `chore:`); no force-push to `main`
+
+### POD Product Creation Checklist
+- [ ] Image uploaded via Printify `/uploads/images.json` (base64)
+- [ ] Correct blueprint + provider + placeholder IDs confirmed
+- [ ] Variants fetched and at least one variant selected
+- [ ] Product created via `POST /shops/{id}/products.json`
+- [ ] Product published to Shopify via `publish.json`
+- [ ] Verify product appears in Shopify Admin
 
 ## Governance
-<!-- Example: Constitution supersedes all other practices; Amendments require documentation, approval, migration plan -->
 
-[GOVERNANCE_RULES]
-<!-- Example: All PRs/reviews must verify compliance; Complexity must be justified; Use [GUIDANCE_FILE] for runtime development guidance -->
+This constitution supersedes all other project practices. Amendments require updating this file and syncing `TOOLS.md` and `.github/copilot-instructions.md`. No production Shopify deployment without owner (Nuwud) approval. All agent tool calls that delete or publish are gated — confirm before irreversible actions.
 
-**Version**: [CONSTITUTION_VERSION] | **Ratified**: [RATIFICATION_DATE] | **Last Amended**: [LAST_AMENDED_DATE]
-<!-- Example: Version: 2.1.1 | Ratified: 2025-06-13 | Last Amended: 2025-07-16 -->
+Runtime development guidance lives in `TOOLS.md`.
+
+**Version**: 1.0.0 | **Ratified**: 2026-05-01 | **Last Amended**: 2026-05-01
