@@ -4,6 +4,8 @@
 > working in this repository. Keep it up to date whenever tooling, credentials
 > paths, or blueprints change.
 
+**Purpose:** POD (Print-on-Demand) automation + Shopify Hydrogen store tooling for Nuwud Multimedia LLC.
+
 ---
 
 ## 1. Repository Layout
@@ -24,8 +26,96 @@ nuwud-dev/
 │   └── workflows/                ← specify workflow definitions
 ├── .vscode/settings.json         ← workspace editor settings
 ├── nuwud-dev.code-workspace      ← VS Code multi-root workspace file
+├── scripts/                      ← automation scripts (Printify, Printful, Shopify)
 └── TOOLS.md                      ← this file
 ```
+
+---
+
+## 2. Credentials
+
+All secrets live in `.env` (gitignored). Load with `python-dotenv` or `dotenv` in Node.
+
+| Key | Service | Notes |
+|---|---|---|
+| `PRINTIFY_API_TOKEN` | Printify REST API | JWT, stored in nuwud-dev workspace |
+| `PRINTIFY_SHOP_ID` | Printify | `26662299` |
+| `PRINTFUL_API_TOKEN` | Printful REST API | 51-char token |
+| `SHOPIFY_STORE_DOMAIN` | Shopify prod | `31zh0s-4t.myshopify.com` |
+| `SHOPIFY_DEV_DOMAIN` | Shopify dev | `nuwud-shop-0532438991d762b1a700.o2.myshopify.dev` |
+
+OpenClaw copies: `C:\Users\Nuwud\.openclaw\workspaces\nuwud-dev\printify-credentials.json` and `printful-credentials.json`
+
+---
+
+## 3. Logo Assets
+
+All source files at: `C:\Users\Nuwud\Projects\Nuwud Multimedia LLC\Nuwud Logos\`
+
+| File | Use |
+|---|---|
+| `Nuwud-Gorilla-Logo-Fixed-white.png` | Dark apparel (DTG/embroidery) |
+| `Nuwud-Gorilla-Logo-Fixed.png` (958KB) | Light products, stickers, tote |
+| `Nuwud-Gorilla-Logo-Fixed.svg` | Embroidery conversion |
+| `Nuwud_Gorilla_3Inch_Hologram_Sticker.png` | Hologram sticker product |
+
+---
+
+## 4. Printify API Quick Reference
+
+Base URL: `https://api.printify.com/v1` — Bearer token auth.
+
+```
+POST /v1/uploads/images.json          ← upload image (base64)
+GET  /v1/catalog/blueprints/{bp}/print_providers/{p}/variants.json
+POST /v1/shops/{shop_id}/products.json ← create product
+POST /v1/shops/{shop_id}/products/{id}/publish.json ← push to Shopify
+```
+
+**Blueprint IDs (provider 73 = Printed Simply):**
+
+| Product | Blueprint | Placeholder(s) |
+|---|---|---|
+| Die-Cut Sticker 3" | `358` | `front` |
+| Sticker Sheet | `661` | `front_1, front_2, front_3, front_4` ⚠️ NOT `front` |
+| Tote Bag | `51` | `front` |
+| AOP Hoodie | confirm via catalog | `front`, `back` |
+
+---
+
+## 5. Printful API Quick Reference
+
+Base URL: `https://api.printful.com` — Bearer token auth.
+Embroidered hats (Yupoong 6089M snapback, 6245CM dad hat) are supported via API.
+
+---
+
+## 6. Tapstitch
+
+**No API.** Manual wizard only via Shopify Apps → Tapstitch.
+Target: Yupoong 6089M Snapback | $38 retail | SVG | 3D Puff (when available).
+
+---
+
+## 7. Shopify Hydrogen Store
+
+Project: `C:\Users\Nuwud\Projects\MyStore`
+Dev server: `npm run dev` (port 3000/4000)
+Codegen: `npm run codegen`
+
+---
+
+## 8. Local AI Stack
+
+Ollama at `http://localhost:11434`
+
+| Model | Best for |
+|---|---|
+| `qwen3:30b-a3b` | Code, API tasks (nuwud-dev default) |
+| `qwen3:8b` | Fast fallback |
+| `gemma4:26b` | Creative/writing |
+| `deepseek-r1:14b` | Reasoning/planning |
+| `patrick:latest` | Custom 19GB model |
 
 ---
 
