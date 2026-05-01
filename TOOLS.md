@@ -231,6 +231,76 @@ c:\Users\Nuwud\Projects\nuwud-dev\.env.example
 
 ---
 
+## 8. POD Automation — Printify
+
+Scripts live in `scripts/`. Run all commands from the **project root** (`C:\Users\Nuwud\Projects\nuwud-dev`).
+
+### Prerequisites
+
+1. Python 3.11+ installed and on PATH.
+2. Install dependencies:
+   ```powershell
+   pip install -r requirements.txt
+   ```
+3. Copy `.env.example` → `.env` and fill in:
+   - `PRINTIFY_API_TOKEN` — your Printify Bearer token
+   - `PRINTIFY_SHOP_ID` — `26662299` (your Printify shop)
+   - `LOGO_DIR` — path to your logo directory, e.g. `C:\Users\Nuwud\Projects\Nuwud Multimedia LLC\Nuwud Logos\`
+
+### List Available Blueprints
+
+```powershell
+python scripts/list_blueprints.py
+python scripts/list_blueprints.py --provider 73
+```
+
+- Requires: `PRINTIFY_API_TOKEN`
+- Exit codes: `0` (success), `1` (missing env), `3` (API error)
+
+### Create and Publish Printify Products
+
+**Die-Cut Sticker 3"** (blueprint 358, placeholder `front`):
+```powershell
+python scripts/create_printify_product.py --product sticker-3in
+```
+
+**Sticker Sheet** (blueprint 661, placeholders `front_1`…`front_4`):
+```powershell
+python scripts/create_printify_product.py --product sticker-sheet
+```
+
+**Tote Bag** (blueprint 51, placeholder `front`):
+```powershell
+python scripts/create_printify_product.py --product tote
+```
+
+### --dry-run Mode
+
+Validates env vars, confirms logo file exists, prints resolved config. **No API calls made.** Exits `0` if everything is valid.
+
+```powershell
+python scripts/create_printify_product.py --product sticker-3in --dry-run
+python scripts/create_printify_product.py --product sticker-sheet --dry-run
+python scripts/create_printify_product.py --product tote --dry-run
+```
+
+### Override Logo Path
+
+```powershell
+python scripts/create_printify_product.py --product sticker-3in --logo-path "C:\path\to\my-logo.png"
+```
+
+### Exit Codes
+
+| Code | Meaning |
+|---|---|
+| `0` | Success — product published to Shopify (or `--dry-run` validated OK) |
+| `1` | Missing required environment variables (full list printed) |
+| `2` | Logo file not found at resolved path |
+| `3` | Printify API error (status + response body printed) |
+
+---
+
 ## 7. Agent Self-Navigation Checklist
 
 When starting work in this repo, an agent should:
