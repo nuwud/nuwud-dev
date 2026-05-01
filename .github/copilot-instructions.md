@@ -1,7 +1,7 @@
 <!-- SPECKIT START -->
 For additional context about technologies to be used, project structure,
 shell commands, and other important information, read the current plan:
-`.specify/feature/plan.md`
+`.specify/features/nuwud-dev-core/plan.md`
 <!-- SPECKIT END -->
 
 ## Project: nuwud-dev — POD Automation & Shopify Hydrogen Tooling

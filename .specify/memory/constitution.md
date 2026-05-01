@@ -17,7 +17,16 @@ All shell commands must work in PowerShell on Windows. Avoid Linux-only tools (`
 ### V. Shopify Hydrogen Standards
 TypeScript only for Hydrogen/Storefront work. Use React Router v7 patterns. Regenerate types with `npm run codegen` after any GraphQL change. Never deploy to Oxygen without a clean `npm run typecheck` and `npm run build`.
 
-### VI. Simplicity (YAGNI)
+**Boundary:** The Hydrogen storefront lives at `C:\Users\Nuwud\Projects\MyStore\` in its own VS Code window. nuwud-dev does NOT contain storefront source — it contains scripts and tooling that *target* that store via API or CLI. Never copy storefront files into nuwud-dev.
+
+### VI. Dual Memory — Local + Notion
+All significant decisions, specs, plans, tasks, and agent outputs are written to both:
+1. The local `.specify/` directory (git-tracked source of truth)
+2. The Nuwud Notion workspace (human-readable command layer for Patrick)
+
+Notion is updated whenever a spec, plan, or task list is created or amended. The Notion page "🛍️ Shopify + POD AI Workflow — Nuwud Training Guide" is the canonical agent training reference.
+
+### VII. Simplicity (YAGNI)
 Don't build what isn't needed yet. Scripts solve one product type at a time. No shared infrastructure for one-time operations. Abstractions require at least 3 use cases before being extracted.
 
 ## Technology Stack
