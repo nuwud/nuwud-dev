@@ -134,8 +134,13 @@ def main() -> None:
     if not variants:
         print("ERROR: No variants returned from Printify catalog API.")
         sys.exit(3)
+    # Apply variant_filter if specified in config
+    variant_filter = config.get("variant_filter")
+    if variant_filter:
+        variants = [v for v in variants if v["id"] in variant_filter]
+        print(f"  Filtered to {len(variants)} variants (from variant_filter).")
     variant_ids = [v["id"] for v in variants]
-    print(f"  {len(variant_ids)} variants fetched.")
+    print(f"  {len(variant_ids)} variants included.")
 
     # --- Step 7: Create product ---
     print(f"Creating product: {config['title']} ...")

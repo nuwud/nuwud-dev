@@ -74,6 +74,50 @@ PRODUCT_CONFIGS: Dict[str, Dict[str, Any]] = {
         ),
         "price": 7999,
     },
+    # ── Hats (Embroidery) ──────────────────────────────────────────────────
+    "snapback-black": {
+        "blueprint_id": 1755,
+        "provider_id": 99,
+        "placeholders": ["front"],
+        "logo_asset": "gorilla-icon.png",
+        "title": "Nuwud Gorilla Snapback Hat — Black",
+        "description": (
+            "Classic structured snapback with raised embroidered Nuwud Gorilla logo. "
+            "One size fits most. Available in multiple colorways."
+        ),
+        "price": 3499,
+        "variant_filter": [118985],  # Black only
+    },
+    "snapback-multicolor": {
+        "blueprint_id": 1755,
+        "provider_id": 99,
+        "placeholders": ["front"],
+        "logo_asset": "gorilla-icon.png",
+        "title": "Nuwud Gorilla Snapback Hat — Color Edition",
+        "description": (
+            "Classic structured snapback with raised embroidered Nuwud Gorilla logo. "
+            "Choose from multiple cap colorways. One size fits most."
+        ),
+        "price": 3499,
+        # All colors except black (separate listing)
+        "variant_filter": [118986, 118987, 118988, 118989, 118990, 118991,
+                           118992, 118993, 118994, 118995, 118996, 118997,
+                           118998, 118999, 119000, 119001],
+    },
+    "trucker-camo": {
+        "blueprint_id": 1752,
+        "provider_id": 99,
+        "placeholders": ["front"],
+        "logo_asset": "gorilla-icon.png",
+        "title": "Nuwud Gorilla Camo Trucker Hat (Embroidered)",
+        "description": (
+            "Structured trucker cap with camo bill and raised embroidered Nuwud Gorilla logo. "
+            "Available in Camo Black, Camo Brown, and Camo Olive. One size fits most."
+        ),
+        "price": 3699,
+        # All 3 camo variants
+        "variant_filter": [118969, 118970, 118971],
+    },
 }
 
 
