@@ -24,7 +24,7 @@ from dotenv import load_dotenv
 
 # Load .env from the project root (one level up from scripts/)
 _project_root = Path(__file__).parent.parent
-load_dotenv(_project_root / ".env")
+load_dotenv(_project_root / ".env", override=True)
 
 # Allow `from lib.xxx import` when running as a script from project root
 if str(_project_root / "scripts") not in sys.path:

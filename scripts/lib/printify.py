@@ -24,12 +24,13 @@ PRINTIFY_BASE_URL = "https://api.printify.com/v1"
 
 PRODUCT_CONFIGS: Dict[str, Dict[str, Any]] = {
     "sticker-3in": {
-        "blueprint_id": 358,
+        "blueprint_id": 600,
         "provider_id": 73,
         "placeholders": ["front"],
         "logo_asset": "Nuwud-Gorilla-Logo-Fixed.png",
         "title": 'Nuwud Gorilla Die-Cut Sticker 3"',
         "description": 'Premium 3" die-cut Nuwud Gorilla sticker.',
+        "price": 499,
     },
     "sticker-sheet": {
         "blueprint_id": 661,
@@ -38,14 +39,40 @@ PRODUCT_CONFIGS: Dict[str, Dict[str, Any]] = {
         "logo_asset": "Nuwud-Gorilla-Logo-Fixed.png",
         "title": "Nuwud Gorilla Sticker Sheet",
         "description": "Sheet of Nuwud Gorilla logo stickers.",
+        "price": 799,
     },
     "tote": {
-        "blueprint_id": 51,
-        "provider_id": 73,
+        "blueprint_id": 553,
+        "provider_id": 34,
         "placeholders": ["front"],
         "logo_asset": "Nuwud-Gorilla-Logo-Fixed.png",
         "title": "Nuwud Gorilla Tote Bag",
         "description": "Canvas tote bag with Nuwud Gorilla logo.",
+        "price": 1899,
+    },
+    "hologram-sticker": {
+        "blueprint_id": 811,
+        "provider_id": 73,
+        "placeholders": ["front"],
+        "logo_asset": "Nuwud_Gorilla_3Inch_Hologram_Sticker.png",
+        "title": 'Nuwud Gorilla Holographic Die-Cut Sticker 3"',
+        "description": (
+            'Premium 3" holographic die-cut Nuwud Gorilla sticker. '
+            "Prismatic rainbow finish — stands out on any surface."
+        ),
+        "price": 699,
+    },
+    "aop-hoodie": {
+        "blueprint_id": 450,
+        "provider_id": 10,
+        "placeholders": ["front", "back"],
+        "logo_asset": "gorilla-icon-white.png",
+        "title": "Nuwud Gorilla All-Over Print Hoodie",
+        "description": (
+            "Unisex all-over print pullover hoodie featuring the Nuwud Gorilla logo. "
+            "Sublimation print covers the entire garment — front, back, and sleeves."
+        ),
+        "price": 7999,
     },
 }
 
@@ -166,34 +193,33 @@ def create_product(
     Exits:
         sys.exit(3) on API error.
     """
-    print_areas = []
-    for placeholder in config["placeholders"]:
-        print_areas.append(
-            {
-                "variant_ids": variant_ids,
-                "placeholders": [
-                    {
-                        "position": placeholder,
-                        "images": [
-                            {
-                                "id": image_id,
-                                "x": 0.5,
-                                "y": 0.5,
-                                "scale": 1,
-                                "angle": 0,
-                            }
-                        ],
-                    }
-                ],
-            }
-        )
+    print_areas = [
+        {
+            "variant_ids": variant_ids,
+            "placeholders": [
+                {
+                    "position": placeholder,
+                    "images": [
+                        {
+                            "id": image_id,
+                            "x": 0.5,
+                            "y": 0.5,
+                            "scale": 1,
+                            "angle": 0,
+                        }
+                    ],
+                }
+                for placeholder in config["placeholders"]
+            ],
+        }
+    ]
 
     payload = {
         "title": config["title"],
         "description": config["description"],
         "blueprint_id": config["blueprint_id"],
         "print_provider_id": config["provider_id"],
-        "variants": [{"id": vid, "price": 0, "is_enabled": True} for vid in variant_ids],
+        "variants": [{"id": vid, "price": config.get("price", 999), "is_enabled": True} for vid in variant_ids],
         "print_areas": print_areas,
     }
 
